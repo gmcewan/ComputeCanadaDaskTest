@@ -160,9 +160,9 @@ def setup_dask_client(num_cpus, arg_memory):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run a Training Experiment.')
     parser.add_argument('-c', '--cpus', type=int, default=2,
-                        help='CPUs to use (default: single cpu, perform sequentially)')
+                        help='CPUs to use (default: 2)')
     parser.add_argument('-m', '--memory', type=int, default=10,
-                        help='Total memory available to the experiment in GB (default is 14)')
+                        help='Total memory available to the experiment in GB (default is 10)')
 
     args = parser.parse_args()
     print(args)
