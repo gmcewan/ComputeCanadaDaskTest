@@ -9,9 +9,9 @@ OUTPUT_DIR = "output"
 
 # parameters for our testing
 ITERATIONS = 100
-REPLICATIONS = 20
-NUM_PARTICLES = 30
-NUM_SCENARIOS = 20
+REPLICATIONS = 5
+NUM_PARTICLES = 15
+NUM_SCENARIOS = 10
 
 RESULTS_DB_NAME = "particle_{}-training_scores.db"
 RESULTS_DB_PATH = os.path.join(OUTPUT_DIR, RESULTS_DB_NAME)
