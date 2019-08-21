@@ -150,7 +150,7 @@ def setup_dask_client(num_cpus, arg_memory):
         mem_limit = round(total_memory / num_cpus)
 
         cluster = LocalCluster(n_workers=num_cpus, threads_per_worker=1, memory_limit=mem_limit)
-        print([worker.memory_limit for worker in cluster.workers])
+        # print([worker.mempry for worker in cluster.workers])
 
         dask_client = Client(cluster, timeout=600)
 
