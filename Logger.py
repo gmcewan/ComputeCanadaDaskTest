@@ -56,10 +56,10 @@ class Logger:
         """
         with sqlite3.connect(self.db_filepath, timeout=60) as log_db:
             create_str = """CREATE TABLE IF NOT EXISTS {} 
-                                        (scenario_name, run_id, type, time, value,
-                                        unique (scenario_name, run_id, type, time) 
-                                        ON CONFLICT REPLACE)""" \
-                                        .format(table_name)
+                                                    (scenario_name, run_id, type, time, value,
+                                                    unique (scenario_name, run_id, type, time) 
+                                                    ON CONFLICT REPLACE)""" \
+                .format(table_name)
             log_db.execute(create_str)
         self.tables[table_name] = 1
 
@@ -72,24 +72,30 @@ class Logger:
         :param timestamp: Time being logged (days)
         :param value: The information to be recorded.
         """
-        if info_type not in self.tables:
-            self.create_log_table(info_type)
-        # try:
         insert_str = "INSERT INTO {} VALUES (?, ?, ?, ?, ?)".format(info_type)
 
         with sqlite3.connect(self.db_filepath, timeout=60) as log_db:
             try:
                 log_db.execute(insert_str, (self.scenario_name, self.run_id, info_string, timestamp, value))
-            except sqlite3.OperationalError as e:
-                error_print("---")
-                error_print("{}: failed to log to {}".format(datetime.datetime.now(), self.db_filepath))
-                error_print(" Table={}: ({}, {}, {}, {}, {})".format(info_type,
-                                                                     self.scenario_name,
-                                                                     self.run_id,
-                                                                     info_string,
-                                                                     timestamp,
-                                                                     value))
-                error_print(e)
+            except sqlite3.OperationalError as e1:
+                error_print("--- 1: {}".format(e1))
+                try:
+                    create_str = """CREATE TABLE IF NOT EXISTS {} 
+                                      (scenario_name, run_id, type, time, value,
+                                      unique (scenario_name, run_id, type, time) 
+                                      ON CONFLICT REPLACE)""".format(info_type)
+                    log_db.execute(create_str)
+                    log_db.execute(insert_str, (self.scenario_name, self.run_id, info_string, timestamp, value))
+                except sqlite3.OperationalError as e2:
+                    error_print("--- 2: {}".format(e2))
+                    error_print("")
+                    error_print("{}: failed to log to {}".format(datetime.datetime.now(), self.db_filepath))
+                    error_print(" Table={}: ({}, {}, {}, {}, {})".format(info_type,
+                                                                         self.scenario_name,
+                                                                         self.run_id,
+                                                                         info_string,
+                                                                         timestamp,
+                                                                         value))
 
     def end_scenario(self, time_step):
         """
