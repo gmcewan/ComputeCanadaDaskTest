@@ -8,7 +8,7 @@ from Logger import Logger
 
 
 def run_model(experiment_name, scenario_name, run_id, total_runs, total_steps, scratch_path):
-    print("    scenario {} started".format(scenario_name))
+    print("    scenario {}: rep {} started".format(scenario_name, run_id))
 
     model = Model(experiment_name, scenario_name, run_id, scratch_path)
 
@@ -97,8 +97,8 @@ class Model:
         return copy.deepcopy(self.logger.db_filepath), copy.deepcopy(self.logger.tables)
 
     def start(self, total_runs):
-        print("start {}:{}:{}  total={} ({})".format(self.experiment_name, self.scenario_name, self.run_id, total_runs,
-                                                     datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+        # print("start {}:{}:{}  total={} ({})".format(self.experiment_name, self.scenario_name, self.run_id, total_runs,
+        #                                              datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
         self.started = True
 
     def run_to_step(self, end_step=None):
@@ -133,7 +133,7 @@ class Model:
 
         self.logger.close()
 
-        print("End: {} {} - {} ({})".format(self.experiment_name, self.scenario_name,
-                                            self.run_id,
-                                            datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+        # print("End: {} {} - {} ({})".format(self.experiment_name, self.scenario_name,
+        #                                     self.run_id,
+        #                                     datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
         self.started = False

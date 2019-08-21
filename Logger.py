@@ -76,6 +76,7 @@ class Logger:
 
         with sqlite3.connect(self.db_filepath, timeout=60) as log_db:
             try:
+                print("inserting: {}".format((self.scenario_name, self.run_id, info_string, timestamp, value)))
                 log_db.execute(insert_str, (self.scenario_name, self.run_id, info_string, timestamp, value))
             except sqlite3.OperationalError as e1:
                 error_print("--- 1: {}".format(e1))

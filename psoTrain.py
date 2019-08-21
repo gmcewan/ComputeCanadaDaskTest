@@ -89,9 +89,9 @@ class Train:
                 # see if there's a new best score
                 self.update_global(score, position)
 
-                print("-- tassie devil\n{}\n{}\n{}\n".format([particle.name for particle in self.particles],
-                                                             self.particle_epochs_completed,
-                                                             self.particles_running))
+                # print("-- tassie devil\n{}\n{}\n{}\n".format([particle.name for particle in self.particles],
+                #                                              self.particle_epochs_completed,
+                #                                              self.particles_running))
 
                 # find the next particle (min epochs done)
                 min_epochs = min(self.particle_epochs_completed)
