@@ -3,7 +3,7 @@
 #SBATCH --mail-user=gmcewan@upei.ca
 #SBATCH --mail-type=all
 
-#SBATCH --time=00:20:00
+#SBATCH --time=12:00:00
 #SBATCH --mem=300G
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=32
