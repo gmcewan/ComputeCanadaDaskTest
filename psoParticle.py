@@ -58,7 +58,7 @@ def pickle_position_velocity(dictionary):
 def unpickle_position_velocity(pickle_tuple_list):
     dictionary = defaultdict(dict)
     tuple_list = pickle.loads(pickle_tuple_list)
-    print(tuple_list)
+    # print(tuple_list)
 
     for name, value in tuple_list:
         dictionary[name] = value
@@ -94,7 +94,7 @@ class Particle:
             create_table_str = create_table_str.format(RESULTS_TABLE_NAME, ITERATION_COLUMN_NAME, PARTICLE_COLUMN_NAME,
                                                        POSITION_COLUMN_NAME, VELOCITY_COLUMN_NAME, SCORE_COLUMN_NAME)
             db.execute(create_table_str)
-            print("created results table: {}".format(create_table_str))
+            # print("created results table: {}".format(create_table_str))
 
         if not os.path.exists(self.results_db_path_name):
             # make a copy in the results directory
