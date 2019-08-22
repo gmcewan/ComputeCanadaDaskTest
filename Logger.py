@@ -72,6 +72,7 @@ class Logger:
         :param timestamp: Time being logged (days)
         :param value: The information to be recorded.
         """
+
         insert_str = "INSERT INTO {} VALUES (?, ?, ?, ?, ?)".format(info_type)
 
         with sqlite3.connect(self.db_filepath, timeout=60) as log_db:
