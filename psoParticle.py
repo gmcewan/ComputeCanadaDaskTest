@@ -37,6 +37,7 @@ def take_closest(my_list, my_number):
 
 
 def score_particle_position(particle, epoch):
+    print("  score {}, epoch {}".format(particle.name, epoch))
     score, position, velocity = particle.score_current_position(epoch)
     return particle.name, score, position, velocity
 
@@ -192,6 +193,7 @@ class Particle:
                 # no previous score for this position - have to work it out
 
                 # create the experiment
+                print("  starting experiment: p {}, epoch {}".format(self.name, current_iteration))
                 experiment = Experiment("p_{}-e_{}".format(self.name, current_iteration), REPLICATIONS, self.tmp_dir)
 
                 # add a bunch of scenarios (only the scenario count has any impact
@@ -200,7 +202,7 @@ class Particle:
 
                 # run the experiment
                 result_db_name = experiment.run_experiment()
-                print("scoring against: {}".format(result_db_name))
+                # print("scoring against: {}".format(result_db_name))
 
                 # the experiment results are not important for the score in the test
                 score = self.get_ackley_score()

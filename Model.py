@@ -8,7 +8,7 @@ from Logger import Logger
 
 
 def run_model(experiment_name, scenario_name, run_id, total_runs, total_steps, scratch_path):
-    print("    scenario {}: rep {} started".format(scenario_name, run_id))
+    # print("    scenario {}: rep {} started".format(scenario_name, run_id))
 
     model = Model(experiment_name, scenario_name, run_id, scratch_path)
 
@@ -23,8 +23,8 @@ def run_model(experiment_name, scenario_name, run_id, total_runs, total_steps, s
     minutes, seconds = divmod(end - start, 60)
     hours, minutes = divmod(minutes, 60)
 
-    print("      Scenario_{}-rep_{} took {}h:{:0>2}m:{:0>2}s".format(scenario_name, run_id, hours, minutes,
-                                                                     round(seconds)))
+    # print("      Scenario_{}-rep_{} took {}h:{:0>2}m:{:0>2}s".format(scenario_name, run_id, hours, minutes,
+    #                                                                  round(seconds)))
 
     return logger_filepath, logger_tables
 
@@ -126,8 +126,8 @@ class Model:
         """
         Stop the model running. Closes everything safely.
         """
-        print("end {}:{}:{}  --  {}/{} steps".format(self.experiment_name, self.scenario_name, self.run_id,
-                                                     self.current_step, self.total_steps))
+        # print("end {}:{}:{}  --  {}/{} steps".format(self.experiment_name, self.scenario_name, self.run_id,
+        #                                              self.current_step, self.total_steps))
         # self.current_step = self.total_steps
         self.logger.end_scenario(self.current_step + 1)
 

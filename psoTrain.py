@@ -72,9 +72,9 @@ class Train:
     def solve(self):
         # start off some particles
         futures = []
-        for particle in self.particles[:max(int((self.num_workers + 1) / self.replications), 1)]:
+        for particle in self.particles:  # [:max(int((self.num_workers + 1) / self.replications), 1)]:
             futures.append(self.create_parallel_particle_future(particle.name))
-            time.sleep(60)
+            # time.sleep(60)
 
         completed = as_completed(futures, with_results=True)
 
@@ -93,14 +93,19 @@ class Train:
                 #                                              self.particle_epochs_completed,
                 #                                              self.particles_running))
 
-                # find the next particle (min epochs done)
-                min_epochs = min(self.particle_epochs_completed)
+                # find the next particle (min epochs done and not currently running)
+                min_epochs = sys.maxsize
+                next_particle_pos = -1
+                for pos, (is_running, epochs_done) in enumerate(zip(self.particles_running,
+                                                                    self.particle_epochs_completed)):
+                    if not is_running and epochs_done < min_epochs:
+                        min_epochs = epochs_done
+                        next_particle_pos = pos
                 # print("min: {}".format(min_epochs))
 
                 if min_epochs < self.iterations:
                     # not done yet - find the min particle
-                    particle_num = self.particle_epochs_completed.index(min_epochs)
-                    particle = self.particles[particle_num]
+                    particle = self.particles[next_particle_pos]
 
                     # print("index={}, particle_num={}".format(particle_num, particle.name))
 
@@ -116,14 +121,14 @@ class Train:
 
     def create_parallel_particle_future(self, particle_num):
         self.particles_running[particle_num] = True
-        # print("creating future for {}\n{}\n{}\n{}\n".format(particle_num,
-        #                                                     [particle.name for particle in self.particles],
-        #                                                     self.particle_epochs_completed,
-        #                                                     self.particles_running))
+        print("creating future for {}\n{}\n{}\n{}\n".format(particle_num,
+                                                            [particle.name for particle in self.particles],
+                                                            self.particle_epochs_completed,
+                                                            self.particles_running))
 
         particle_epoch = self.particle_epochs_completed[particle_num]
-        print("iteration {}: particle {} (score={})".format(particle_epoch, particle_num,
-                                                            self.particles[particle_num].local_best_score))
+        # print("iteration {}: particle {} (score={})".format(particle_epoch, particle_num,
+        #                                                     self.particles[particle_num].local_best_score))
 
         future = self.dask_client.submit(score_particle_position, self.particles[particle_num], particle_epoch)
 
@@ -165,7 +170,7 @@ if __name__ == "__main__":
                         help='Total memory available to the experiment in GB (default is 10)')
 
     args = parser.parse_args()
-    print(args)
+    # print(args)
 
     client, cluster = setup_dask_client(args.cpus, args.memory)
 

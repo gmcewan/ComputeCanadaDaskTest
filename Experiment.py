@@ -42,12 +42,13 @@ class Experiment:
         """
         dask_client = get_client(timeout=600)
 
-        print("dask client: {}".format(dask_client))
-        try:
-            secede()
-            seceded = True
-        except ValueError:
-            seceded = False
+        # print("dask client: {}".format(dask_client))
+        # try:
+        secede()
+        print("secede: {}".format(self.name))
+        #     seceded = True
+        # except ValueError:
+        #     seceded = False
 
         futures = []
         total_runs = len(self.scenarios) * self.num_replications
@@ -67,8 +68,9 @@ class Experiment:
 
         loggers_info = dask_client.gather(futures)
 
-        if seceded:
-            rejoin()
+        # if seceded:
+        print("rejoin: {}".format(self.name))
+        rejoin()
 
         # gather all the output dbs into a single db
         out_db_filepath = Logger.gather_databases(self.name, loggers_info)

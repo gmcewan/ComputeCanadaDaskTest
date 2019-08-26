@@ -74,10 +74,11 @@ class Logger:
         """
 
         insert_str = "INSERT INTO {} VALUES (?, ?, ?, ?, ?)".format(info_type)
-
+        # print("Logger e{}:s{}:r{} connecting {}".format(self.experiment_name, self.scenario_name, self.run_id,
+        #                                                    self.db_filepath))
         with sqlite3.connect(self.db_filepath, timeout=60) as log_db:
             try:
-                print("inserting: {}".format((self.scenario_name, self.run_id, info_string, timestamp, value)))
+                # print("inserting: {}".format((self.scenario_name, self.run_id, info_string, timestamp, value)))
                 log_db.execute(insert_str, (self.scenario_name, self.run_id, info_string, timestamp, value))
             except sqlite3.OperationalError as e1:
                 error_print("--- 1: {}".format(e1))
@@ -98,6 +99,8 @@ class Logger:
                                                                          info_string,
                                                                          timestamp,
                                                                          value))
+        # print("  Logger e{}:s{}:r{} disc. {}".format(self.experiment_name, self.scenario_name, self.run_id,
+        #                                                     self.db_filepath))
 
     def end_scenario(self, time_step):
         """
@@ -132,14 +135,16 @@ class Logger:
         :param loggers_info: List specifying all the model DBs:
                              [(model_db_filepath, [table_name, table_name, ...]), ...]
         """
-        print("-- gathering databases: {}".format(experiment_name))
+        # print("-- gathering databases: {}".format(experiment_name))
         out_db_filename = os.path.join(os.path.dirname(loggers_info[0][0]), "{}.db".format(experiment_name))
+        print(" --- gathering: {}".format(out_db_filename))
         if os.path.exists(out_db_filename):
             os.remove(out_db_filename)
         # print("** {}".format(out_db_filename))
         with sqlite3.connect(out_db_filename, timeout=60) as out_db:
             out_db.execute("PRAGMA journal_mode=OFF")
             for in_db_filepath, tables_names in loggers_info:
+                # print("       {}".format(in_db_filepath))
                 with sqlite3.connect(in_db_filepath, timeout=60) as in_db:
                     # go through all the tables
                     for info_type in tables_names:
@@ -161,4 +166,5 @@ class Logger:
                 except FileNotFoundError:
                     # in DB and/or journal file doesn't exist - ignore and move on
                     pass
+        print(" --- done gather: {}".format(out_db_filename))
         return out_db_filename
